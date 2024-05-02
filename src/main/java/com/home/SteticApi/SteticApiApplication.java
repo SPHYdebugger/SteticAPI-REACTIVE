@@ -1,0 +1,13 @@
+package com.home.SteticApi;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class SteticApiApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(SteticApiApplication.class, args);
+	}
+
+}
