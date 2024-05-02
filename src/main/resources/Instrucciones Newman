@@ -1,0 +1,7 @@
+Lanzar el newman desde terminal del proyecto
+
+Situarse en la carpeta resources y ejecutar:
+newman run SteticApi.postman_collection.json
+
+Para lanzar la coleccion y generar un informe ejecutar:
+newman run SteticApi.postman_collection.json --reporters html --reporter-html-export informe.html

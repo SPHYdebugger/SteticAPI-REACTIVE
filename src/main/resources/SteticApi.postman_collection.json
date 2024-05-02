@@ -1,0 +1,1848 @@
+{
+	"info": {
+		"_postman_id": "ff3a772f-4802-4dfa-987c-b3c060761b43",
+		"name": "SteticApi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34068345"
+	},
+	"item": [
+		{
+			"name": "CRUD Products",
+			"item": [
+				{
+					"name": "add product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check status code 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check notNull name\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.name).to.not.be.null;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check value of price\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.price).to.be.above(0);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Crema facial\",\r\n    \"size\": 110,\r\n    \"description\": \"crema para la cara\",\r\n    \"price\": 15.0,\r\n    \"registrationDate\": \"2023-12-28\",\r\n    \"dangerous\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check status code 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n        \"name\": \"impre\",\r\n        \"description\": \"Para impri\",\r\n        \"price\": 150.0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/product/124",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"product",
+								"124"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get products",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('check status code 200', function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('check length of products = 8', function () {\r",
+									"    var responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.length).to.equal(8);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check name of the last product\",function(){\r",
+									"    var responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson[responseJson.length-1].name).to.equal(\"Crema corpo\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "products?name=",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('check status code 200', function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check name of the product\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an('array').and.to.not.be.empty;\r",
+									"    var product = jsonData[0];\r",
+									"    pm.expect(product).to.have.property('name');\r",
+									"    var name = product.name;\r",
+									"    pm.expect(name).to.equal(\"Serum\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Check if 'orders' array is empty\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an('array').and.to.not.be.empty;\r",
+									"    pm.expect(jsonData[0]).to.have.property('orders');\r",
+									"    var orders = jsonData[0].orders;\r",
+									"    pm.expect(orders).to.be.an('array').and.to.not.be.empty;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/products?name=Serum",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Serum"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "products?productId=2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('check status code 200', function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check id of the product\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an('array').and.to.not.be.empty;\r",
+									"    var product = jsonData[0];\r",
+									"    pm.expect(product).to.have.property('id');\r",
+									"    var id = product.id;\r",
+									"    pm.expect(id).to.equal(2);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Check if 'orders' array is empty\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an('array').and.to.not.be.empty;\r",
+									"    pm.expect(jsonData[0]).to.have.property('orders');\r",
+									"    var orders = jsonData[0].orders;\r",
+									"    pm.expect(orders).to.be.an('array').and.to.be.empty;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/products?productId=2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "productId",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "product/12",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('check status code 404', function () {\r",
+									"    pm.expect(pm.response.code).to.equal(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check message\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an('object').and.to.not.be.empty;    \r",
+									"    pm.expect(jsonData).to.have.property('message');\r",
+									"    var message = jsonData.message;\r",
+									"    pm.expect(message).to.equal(\"The product 12 doesn't exist\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/product/12",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"product",
+								"12"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "products?dangerous=true",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('check status code 200', function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check name of the last product\",function(){\r",
+									"    var responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson[responseJson.length-1].name).to.equal(\"Crema corpo\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Count products with empty orders\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an('array').and.to.not.be.empty; \r",
+									"    var productsWithEmptyOrders = 0; \r",
+									"    jsonData.forEach(function(product) {\r",
+									"        if (product.orders && product.orders.length === 0) {\r",
+									"            productsWithEmptyOrders++;\r",
+									"        }\r",
+									"    });\r",
+									"    \r",
+									"    pm.expect(productsWithEmptyOrders).to.equal(4);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/products?dangerous=false",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "dangerous",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modify product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('check status code 200', function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Check 'name' field in the request body\", function () {\r",
+									"    var requestBody = pm.request.body;\r",
+									"    var jsonData = JSON.parse(requestBody);\r",
+									"    pm.expect(jsonData.name).to.equal(\"impre\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check 'size' field \", function () {\r",
+									"    var requestBody = pm.request.body;\r",
+									"    var jsonData = JSON.parse(requestBody);\r",
+									"    pm.expect(jsonData.size).to.be.at.above(0);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"name\": \"impre\",\r\n        \"size\": 110,\r\n        \"description\": \"Para impri\",\r\n        \"price\": 150.0,\r\n        \"registrationDate\": \"2023-12-14\",\r\n        \"dangerous\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/product/109",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"product",
+								"109"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CRUD Clients",
+			"item": [
+				{
+					"name": "add client",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check status code 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check notNull name\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.name).to.not.be.null;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check length of DNI\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.dni.length).to.be.at.most(9);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstname\": \"Maria\",\r\n    \"lastname\": \"Trigo\",\r\n    \"city\": \"Vigo\",\r\n    \"street\": \"Camposancos\",\r\n    \"numHouse\": 570,\r\n    \"age\": 55,\r\n    \"dni\": \"88789798T\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/clients",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"clients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete client by dni",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check status code 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/client/88789798T",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"client",
+								"88789798T"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Clients",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('check status code 200', function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('check length of clients = 8', function () {\r",
+									"    var responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.length).to.equal(8);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check older client age\", function () {\r",
+									"    var responseJson = pm.response.json();\r",
+									"    var maxAge = 0;\r",
+									"    responseJson.forEach(function(client) {\r",
+									"        if (client.age && client.age > maxAge) {\r",
+									"            maxAge = client.age; \r",
+									"        }\r",
+									"    });\r",
+									"\r",
+									"    pm.expect(maxAge).to.equal(45);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/clients",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"clients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "clients?firstname=",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('check status code 200', function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check name of the client\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an('array').and.to.not.be.empty;\r",
+									"    var product = jsonData[0];\r",
+									"    pm.expect(product).to.have.property('firstname');\r",
+									"    var name = product.firstname;\r",
+									"    pm.expect(name).to.equal(\"santi\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Check if 'orders' array is empty\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an('array').and.to.not.be.empty;\r",
+									"    pm.expect(jsonData[0]).to.have.property('orders');\r",
+									"    var orders = jsonData[0].orders;\r",
+									"    pm.expect(orders).to.be.an('array').and.to.be.empty;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"impresora\",\r\n    \"description\":\"Para imprimir\",\r\n    \"price\":150\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/clients?firstname=santi",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"clients"
+							],
+							"query": [
+								{
+									"key": "firstname",
+									"value": "santi"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "clients?dni=",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check name of the client\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an('array').and.to.not.be.empty;\r",
+									"    var client = jsonData[0];\r",
+									"    pm.expect(client).to.have.property('firstname');\r",
+									"    var name = client.firstname;\r",
+									"    pm.expect(name).to.equal(\"Albert\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check length of DNI\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an('array').and.to.not.be.empty;\r",
+									"    var client = jsonData[0];\r",
+									"    var dni = client.dni;\r",
+									"    pm.expect(dni.length).equal(10);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"impresora\",\r\n    \"description\":\"Para imprimir\",\r\n    \"price\":150\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/clients?dni=878788787T",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"clients"
+							],
+							"query": [
+								{
+									"key": "dni",
+									"value": "878788787T"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "clients?city=",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check name of the city\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an('array').and.to.not.be.empty;\r",
+									"    var client = jsonData[0];\r",
+									"    pm.expect(client).to.have.property('city');\r",
+									"    var city = client.city;\r",
+									"    pm.expect(city).to.equal(\"Zaragoza\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check city not contains numbers\", function () {\r",
+									"    var responseJson = pm.response.json();\r",
+									"    responseJson.forEach(function(client) {\r",
+									"        var containsNumbers = /\\d/.test(client.city);\r",
+									"        pm.expect(containsNumbers).to.be.false;\r",
+									"    });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"impresora\",\r\n    \"description\":\"Para imprimir\",\r\n    \"price\":150\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/clients?city=Zaragoza",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"clients"
+							],
+							"query": [
+								{
+									"key": "city",
+									"value": "Zaragoza"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Client by DNI",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check name of the client\", function () {\r",
+									"    var jsonData = pm.response.json();    \r",
+									"    pm.expect(jsonData).to.have.property('firstname');\r",
+									"    var name = jsonData.firstname;\r",
+									"    pm.expect(name).to.equal(\"Aitor\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check length of DNI\", function () {\r",
+									"    var jsonData = pm.response.json();    \r",
+									"    var dni = jsonData.dni;\r",
+									"    pm.expect(dni.length).equal(9);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/client/00000001A",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"client",
+								"00000001A"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Client by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check status code 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check name of the client\", function () {\r",
+									"    var jsonData = pm.response.json();    \r",
+									"    pm.expect(jsonData).to.have.property('firstname');\r",
+									"    var name = jsonData.firstname;\r",
+									"    pm.expect(name).to.equal(\"Alberto\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check ID\", function () {\r",
+									"    var jsonData = pm.response.json();    \r",
+									"    var id = jsonData.id;\r",
+									"    pm.expect(id).to.be.above(0);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/clients/37",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"clients",
+								"37"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get client orders",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('check status code 200', function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check order id\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an('array').and.to.not.be.empty;\r",
+									"    var order = jsonData[0];\r",
+									"    pm.expect(order).to.have.property('id');\r",
+									"    var id = order.id;\r",
+									"    pm.expect(id).to.equal(2);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Check if is a online order\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an('array').and.to.not.be.empty;\r",
+									"    pm.expect(jsonData[0]).to.have.property('onlineOrder');\r",
+									"    var online = jsonData[0].onlineOrder;\r",
+									"    pm.expect(online).equal(true);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/client/3/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"client",
+								"3",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modify client by dni",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('check status code 200', function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Check 'name' field in the request body\", function () {\r",
+									"    var requestBody = pm.request.body;\r",
+									"    var jsonData = JSON.parse(requestBody);\r",
+									"    pm.expect(jsonData.firstname).to.equal(\"santi\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check 'dni' field isn´t empty\", function () {\r",
+									"    var requestBody = pm.request.body;\r",
+									"    var jsonData = JSON.parse(requestBody);\r",
+									"    pm.expect(jsonData.dni).to.be.not.empty;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstname\": \"santi\",\r\n    \"lastname\": \"Tte\",\r\n    \"dni\": \"87676554G\",\r\n    \"street\": \"Camposercos\",\r\n    \"numHouse\": 5744,\r\n    \"age\": 45\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/client/87676554G",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"client",
+								"87676554G"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modify client by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('check status code 200', function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Check 'name' field in the request body\", function () {\r",
+									"    var requestBody = pm.request.body;\r",
+									"    var jsonData = JSON.parse(requestBody);\r",
+									"    pm.expect(jsonData.firstname).to.equal(\"Alberto\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check 'dni' field \", function () {\r",
+									"    var requestBody = pm.request.body;\r",
+									"    var jsonData = JSON.parse(requestBody);\r",
+									"    pm.expect(jsonData.dni).to.be.not.empty;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"firstname\": \"Alberto\",\r\n        \"lastname\": \"chicote\",\r\n        \"dni\": \"83388383A\",              \r\n        \"VIP\": false        \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/clients/37",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"clients",
+								"37"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CRUD Orders",
+			"item": [
+				{
+					"name": "Get Orders",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "orders?creationDate=",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/orders?creationDate=2023-12-14",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"orders"
+							],
+							"query": [
+								{
+									"key": "creationDate",
+									"value": "2023-12-14"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "orders?number=",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/orders?number=867fb664-3334-4ae3-ba1d-a5498b5a6164",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"orders"
+							],
+							"query": [
+								{
+									"key": "number",
+									"value": "867fb664-3334-4ae3-ba1d-a5498b5a6164"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "orders?onlineOrder=true",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/orders?onlineOrder=true",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"orders"
+							],
+							"query": [
+								{
+									"key": "onlineOrder",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add order to client 37",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"onlineOrder\": true,\r\n    \"productIds\":[3]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/client/1/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"client",
+								"1",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modify order",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"productIds\":[2,3]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/order/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"order",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Orders",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/order/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"order",
+								"6"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CRUD Shops",
+			"item": [
+				{
+					"name": "Get shops",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/shops",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"shops"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add shop",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"SteticMadrid\",\r\n    \"address\":\"Castellana\",\r\n    \"employeesNumber\":15,\r\n    \"city\":\"Madrid\",\r\n    \"meters\":100.5,\r\n    \"solarium\":true            \r\n}            \r\n            ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/shops",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"shops"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "shops?solarium=true",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\":\"SteticBarcelona\",\r\n    \"Address\":\"Ramblas\",\r\n    \"EmployeesNumber\":5,\r\n    \"City\":\"Barcelona\",\r\n    \"Meters\":10.5,\r\n    \"Solarium\":true            \r\n}            \r\n            ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/shops?solarium=true",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"shops"
+							],
+							"query": [
+								{
+									"key": "solarium",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "shops?name=SteticMadrid",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\":\"SteticBarcelona\",\r\n    \"Address\":\"Ramblas\",\r\n    \"EmployeesNumber\":5,\r\n    \"City\":\"Barcelona\",\r\n    \"Meters\":10.5,\r\n    \"Solarium\":true            \r\n}            \r\n            ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/shops?name=SteticMadrid",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"shops"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "SteticMadrid"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "shops?city=Barcelona",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\":\"SteticBarcelona\",\r\n    \"Address\":\"Ramblas\",\r\n    \"EmployeesNumber\":5,\r\n    \"City\":\"Barcelona\",\r\n    \"Meters\":10.5,\r\n    \"Solarium\":true            \r\n}            \r\n            ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/shops?city=Barcelona",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"shops"
+							],
+							"query": [
+								{
+									"key": "city",
+									"value": "Barcelona"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modify shop",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"SteticBarcelona\",\r\n    \"address\": \"Delicias\",\r\n    \"employeesNumber\": 3,\r\n    \"city\": \"Barcelona\"      \r\n}            \r\n            ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/shops/40",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"shops",
+								"40"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete shop",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\":\"SteticBarcelona\",\r\n    \"Address\":\"Ramblas\",\r\n    \"EmployeesNumber\":5,\r\n    \"City\":\"Barcelona\",\r\n    \"Meters\":10.5,\r\n    \"Solarium\":true            \r\n}            \r\n            ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/shop/41",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"shop",
+								"41"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CRUD Employees",
+			"item": [
+				{
+					"name": "Get employees",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "        ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/employees",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"employees"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add employee",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Manolo\",\r\n    \"dni\":\"658787873F\",\r\n    \"age\":54,\r\n    \"height\":1.88,\r\n    \"academicTitle\":true      \r\n}            \r\n            ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/employees",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"employees"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add employee to shop",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Carlos\",\r\n    \"dni\":\"55555223R\",\r\n    \"age\":35,\r\n    \"height\":1.88,\r\n    \"academicTitle\":true      \r\n}            \r\n            ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/employees/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"employees",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add employee to shop by IDs",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n            ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/employees/37/add/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"employees",
+								"37",
+								"add",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "employees?academicTitle=false",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Maria del mar\",\r\n    \"DNI\":\"65498732R\",\r\n    \"age\":28,\r\n    \"height\":1.68,\r\n    \"academicTitle\":true      \r\n}            \r\n            ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/employees?academicTitle=false",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"employees"
+							],
+							"query": [
+								{
+									"key": "academicTitle",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "employees?name=Manolo",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Maria del mar\",\r\n    \"DNI\":\"65498732R\",\r\n    \"age\":28,\r\n    \"height\":1.68,\r\n    \"academicTitle\":true      \r\n}            \r\n            ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/employees?name=Manolo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"employees"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Manolo"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "employees?dni=611178333F",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Maria del mar\",\r\n    \"DNI\":\"65498732R\",\r\n    \"age\":28,\r\n    \"height\":1.68,\r\n    \"academicTitle\":true      \r\n}            \r\n            ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/employees?dni=658787873F",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"employees"
+							],
+							"query": [
+								{
+									"key": "dni",
+									"value": "658787873F"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modify employee",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Manolo\",\r\n    \"dni\":\"658787873F\",\r\n    \"age\":54,\r\n    \"height\":1.88,\r\n    \"academicTitle\":false      \r\n}     ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/employee/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"employee",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete employee",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Maria del mar\",\r\n    \"DNI\":\"65498732R\",\r\n    \"age\":28,\r\n    \"height\":1.68,\r\n    \"academicTitle\":true      \r\n}            \r\n            ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/employee/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"employee",
+								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

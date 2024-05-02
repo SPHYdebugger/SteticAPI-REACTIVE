@@ -1,0 +1,1174 @@
+openapi: 3.0.1
+info:
+  title: Stetic API
+  description: API para la gestión de un centro de estética
+  version: 1.0.0
+servers:
+  - url: 'https://tiendasphy.000webhostapp.com/index.php'
+tags:
+  - name: clients
+    description: Operaciones para gestionar clientes
+  - name: products
+    description: Operaciones para gestionar productos
+  - name: orders
+    description: Operaciones para gestionar pedidos
+  - name: employees
+    description: Operaciones para gestionar empleados
+  - name: shops
+    description: Operaciones para gestionar tiendas
+paths:
+  /clients:
+    get:
+      tags:
+        - clients
+      summary: Lista todos los clientes o filtra por nombre, dni o ciudad
+      parameters:
+        - name: firstname
+          in: query
+          description: Nombre del cliente
+          required: false
+          schema:
+            type: string
+        - name: dni
+          in: query
+          description: DNI del cliente
+          required: false
+          schema:
+            type: string
+        - name: city
+          in: query
+          description: ciudad del cliente
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Devuelve la lista completa de clientes o el cliente filtrado
+          content:
+            application/json:
+              example:
+
+                - id: 1
+                  firstname: Juan
+                  lastname: Pérez
+                  DNI: "12345678A"
+                  city: Barcelona
+                  street: Calle Principal
+                  numHouse: 123
+                  age: 30
+                - id: 2
+                  firstname: María
+                  lastname: López
+                  DNI: "87654321B"
+                  city: Madrid
+                  street: Calle Secundaria
+                  numHouse: 456
+                  age: 25
+
+    post:
+      tags:
+        - clients
+      summary: Añadir un nuevo cliente
+      requestBody:
+        description: Cliente a añadir
+        required: true
+        content:
+          application/json:
+            examples:
+              Example1:
+                summary: Ejemplo de nuevo cliente1
+                value: |
+                  {
+                      "firstname": "Manuel",
+                      "lastname": "Martinez",
+                      "DNI": "98765432C",
+                      "city": "Sevilla",
+                      "street": "Calle Nueva",
+                      "numHouse": 789,
+                      "age": 28
+                  }
+              Example2:
+                summary: Ejemplo de nuevo cliente2
+                value: |
+                  {
+                      "firstname": "Antonio",
+                      "lastname": "Carrasco",
+                      "DNI": "87878767R",
+                      "city": "Pamplona",
+                      "street": "Calle Nueva",
+                      "numHouse": 79,
+                      "age": 35
+                  }
+
+      responses:
+        '201':
+          description: Cliente añadido correctamente
+          content:
+            application/json:
+              examples:
+                Example1:
+                  summary: cliente1 creado
+                  value: |
+                    {
+                        "id": 1,
+                        "firstname": "Manuel",
+                        "lastname": "Martinez",
+                        "DNI": "98765432C",
+                        "city": "Sevilla",
+                        "street": "Calle Nueva",
+                        "numHouse": 789,
+                        "age": 28
+                    }
+                Example2:
+                  summary: cliente2 creado
+                  value: |
+                    {
+                        "id": 2,
+                        "firstname": "Antonio",
+                        "lastname": "Carrasco",
+                        "DNI": "87878767R",
+                        "city": "Pamplona",
+                        "street": "Calle Nueva",
+                        "numHouse": 79,
+                        "age": 35
+                    }
+        '400':
+          description: Error de validación en los datos del cliente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+
+  /clients/{clientId}:
+    get:
+      tags:
+        - clients
+      summary: Obtiene un cliente por ID
+      parameters:
+        - name: clientId
+          in: path
+          description: ID del cliente
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+
+      responses:
+        '200':
+          description: Devuelve el cliente solicitado
+          content:
+            application/json:
+              examples:
+                Example1:
+                  summary: cliente con ID 1
+                  value: |
+                    {
+                        "id": 1,
+                        "firstname": "Juan",
+                        "lastname": "Pérez",
+                        "DNI": "12345678A",
+                        "city": "Barcelona",
+                        "street": "Calle Principal",
+                        "numHouse": 123,
+                        "age": 30
+                    }
+                Example2:
+                  summary: cliente con ID 2
+                  value: |
+                    {
+                        "id": 2,
+                        "firstname": "Antonio",
+                        "lastname": "Carrasco",
+                        "DNI": "87878767R",
+                        "city": "Pamplona",
+                        "street": "Calle Nueva",
+                        "numHouse": 79,
+                        "age": 35
+                    }
+        '404':
+          description: Cliente no encontrado
+          content:
+            application/json:
+              example:
+                code: 404
+                message: "Cliente no encontrado"
+
+  /client/{DNI}:
+    get:
+      tags:
+        - clients
+      summary: Obtiene un cliente por DNI
+      parameters:
+        - name: DNI
+          in: path
+          description: DNI del cliente
+          required: true
+          schema:
+            type: string
+            example: Ejemplo con el DNI 87878767R
+
+
+
+      responses:
+        '200':
+          description: Devuelve el cliente solicitado
+          content:
+            application/json:
+              examples:
+                Example1:
+                  summary: cliente con DNI 87878767R
+                  value: |
+                    {
+                        "id": 2,
+                        "firstname": "Antonio",
+                        "lastname": "Carrasco",
+                        "DNI": "87878767R",
+                        "city": "Pamplona",
+                        "street": "Calle Nueva",
+                        "numHouse": 79,
+                        "age": 35
+                    }
+                Example2:
+                  summary: cliente con DNI 12345678A
+                  value: |
+                    {
+                        "id": 1,
+                        "firstname": "Juan",
+                        "lastname": "Pérez",
+                        "DNI": "12345678A",
+                        "city": "Barcelona",
+                        "street": "Calle Principal",
+                        "numHouse": 123,
+                        "age": 30
+                    }
+
+        '404':
+          description: Cliente no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    delete:
+      tags:
+        - clients
+      summary: Elimina un cliente por DNI
+      parameters:
+        - name: DNI
+          in: path
+          description: DNI del cliente
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: El cliente se ha eliminado correctamente
+        '404':
+          description: Cliente no encontrado
+          content:
+            application/json:
+              example:
+                code: 404
+                message: "Cliente no encontrado"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    put:
+      tags:
+        - clients
+      summary: Modifica un cliente por DNI
+      parameters:
+        - name: DNI
+          in: path
+          description: DNI del cliente
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example1:
+                summary: Modificar cliente con DNI 87878767R
+                value: |
+                  {
+                      "firstname": "Antonio",
+                      "lastname": "Carmona",
+                      "city": "Palencia",
+                      "street": "Calle Vieja",
+                      "numHouse": 79,
+                      "age": 35
+                  }
+              Example2:
+                summary: Modificar cliente con DNI 12345678A
+                value: |
+                  {
+                      "firstname": "Santiago",
+                      "lastname": "Perez",
+                      "city": "Vigo",
+                      "street": "Carretera",
+                      "numHouse": 79,
+                      "age": 45
+                  }
+      responses:
+        '200':
+          description: El cliente se ha modificado correctamente
+        '404':
+          description: Cliente no encontrado
+          content:
+            application/json:
+              example:
+                code: 404
+                message: "Cliente no encontrado"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+
+  /products:
+    get:
+      tags:
+        - products
+      summary: Lista todos los productos o filtra por búsqueda
+      parameters:
+        - name: name
+          in: query
+          description: Nombre del producto
+          required: false
+          schema:
+            type: string
+        - name: productId
+          in: query
+          description: ID del producto
+          required: false
+          schema:
+            type: integer
+        - name: dangerous
+          in: query
+          description: producto peligroso
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Devuelve la lista completa de productos o los filtrados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    post:
+      tags:
+        - products
+      summary: Añade un nuevo producto
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          description: El producto se ha registrado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Error de validación en los datos de entrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /product/{productId}:
+    get:
+      tags:
+        - products
+      summary: Obtiene un producto por ID
+      parameters:
+        - name: productId
+          in: path
+          description: ID del producto
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Devuelve el producto que coincide con el ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Producto no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+
+    delete:
+      tags:
+        - products
+      summary: Elimina un producto por ID
+      parameters:
+        - name: productId
+          in: path
+          description: ID del producto
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: El producto se ha eliminado correctamente
+        '404':
+          description: Producto no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+
+    put:
+      tags:
+        - products
+      summary: Modifica un producto por ID
+      parameters:
+        - name: productId
+          in: path
+          description: ID del producto
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: El producto se ha modificado correctamente
+        '404':
+          description: Producto no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+
+  /orders:
+    get:
+      tags:
+        - orders
+      summary: Lista todas las compras olas filtra
+      parameters:
+        - name: number
+          in: query
+          description: número de compra
+          required: false
+          schema:
+            type: string
+
+        - name: creationDate
+          in: query
+          description: fecha de compra
+          required: false
+          schema:
+            type: string
+
+        - name: onlineOrder
+          in: query
+          description: Compra online
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Devuelve la lista completa de compras o las filtradas
+          content:
+            application/json:
+              example:
+                - id: 1
+                  number: "sdfsdf8wef-sdfswfwef9"
+                  creationDate: "20-01-24"
+                  onlineOredr: true
+
+                - id: 2
+                  number: "0977rdf8wef-sd454wfwef9"
+                  creationDate: "20-01-24"
+                  onlineOredr: flase
+
+
+
+  /client/{clientId}/orders:
+    get:
+      tags:
+        - clients
+      summary: Obtiene todas las compras de un cliente por ID de cliente
+      parameters:
+        - name: clientId
+          in: path
+          description: ID del cliente
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Devuelve la lista de compras del cliente solicitado
+          content:
+            application/json:
+              example:
+                - id: 1
+                  number: "sdfsdf8wef-sdfswfwef9"
+                  creationDate: "20-01-24"
+                  onlineOredr: true
+
+                - id: 2
+                  number: "0977rdf8wef-sd454wfwef9"
+                  creationDate: "20-01-24"
+                  onlineOredr: flase
+
+        '204':
+          description: El cliente no tiene compras registradas
+        '404':
+          description: Cliente no encontrado
+          content:
+            application/json:
+              example:
+                code: 404
+                message: "Cliente no encontrado"
+    post:
+      tags:
+        - clients
+      summary: Añadir una nueva compra a un cliente por ID de cliente
+      parameters:
+        - name: clientId
+          in: path
+          description: ID del cliente
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Datos de la nueva compra
+        required: true
+        content:
+          application/json:
+            examples:
+              Example1:
+                summary: Añadir compra1
+                value: |
+                  {
+                      "onlineOreder": true,
+                      "productsId": [3, 5]
+                  }
+              Example2:
+                summary: Añadir compra2
+                value: |
+                  {
+                      "onlineOreder": false,
+                      "productsId": [8]
+                  }
+      responses:
+        '201':
+          description: Compra añadida correctamente
+        '400':
+          description: Error de validación en los datos de la compra
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: Cliente no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /order/{orderId}:
+    get:
+      tags:
+        - orders
+      summary: Obtiene los datos de una compra por ID
+      parameters:
+        - name: orderId
+          in: path
+          description: ID de la compra
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Devuelve los datos de la compra solicitada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '404':
+          description: Compra no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      tags:
+        - orders
+      summary: Modificar una compra por ID
+      parameters:
+        - name: orderId
+          in: path
+          description: ID de la compra
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Nuevos datos para la compra
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        '200':
+          description: La compra se ha modificado correctamente
+        '404':
+          description: Compra no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - orders
+      summary: Eliminar una compra por ID
+      parameters:
+        - name: orderId
+          in: path
+          description: ID de la compra
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: La compra se ha eliminado correctamente
+        '404':
+          description: Compra no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /employees:
+    get:
+      tags:
+        - employees
+      summary: Lista todos los empleados o filtra
+      parameters:
+        - name: name
+          in: query
+          description: Nombre del empleado
+          required: false
+          schema:
+            type: string
+
+        - name: dni
+          in: query
+          description: dni del empleado
+          required: false
+          schema:
+            type: string
+
+        - name: academicTitle
+          in: query
+          description: Si posee titulación
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Devuelve la lista completa de empleados o el empleado filtrado
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Employee'
+    post:
+      tags:
+        - employees
+      summary: Añadir un nuevo empleado
+      requestBody:
+        description: Empleado a añadir
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+      responses:
+        '201':
+          description: Empleado añadido correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+
+  /employee/{employeeId}:
+    get:
+      tags:
+        - employees
+      summary: Obtiene un empleado por ID
+      parameters:
+        - name: employeeId
+          in: path
+          description: ID del empleado
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Devuelve el empleado solicitado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+        '404':
+          description: Empleado no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      tags:
+        - employees
+      summary: Elimina un empleado por ID
+      parameters:
+        - name: employeeId
+          in: path
+          description: ID del empleado
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: El empleado se ha eliminado correctamente
+        '404':
+          description: Empleado no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    put:
+      tags:
+        - employees
+      summary: Modifica un empleado por ID
+      parameters:
+        - name: employeeId
+          in: path
+          description: ID del empleado
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+      responses:
+        '200':
+          description: El empleado se ha modificado correctamente
+        '404':
+          description: Empleado no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+
+  /shops:
+    get:
+      tags:
+        - shops
+      summary: Lista todas las tiendas o las filtradas
+      parameters:
+        - name: name
+          in: query
+          description: Nombre de la tienda
+          required: false
+          schema:
+            type: string
+
+        - name: city
+          in: query
+          description: ciudad de la tienda
+          required: false
+          schema:
+            type: string
+
+        - name: solarium
+          in: query
+          description: Si posee solarium
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Devuelve la lista completa de tiendas o las filtradas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Shop'
+    post:
+      tags:
+        - shops
+      summary: Añadir una nueva tienda
+      requestBody:
+        description: Tienda a añadir
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Shop'
+      responses:
+        '201':
+          description: Tienda añadida correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shop'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+
+  /shop/{shopId}:
+    get:
+      tags:
+        - shops
+      summary: Obtiene una tienda por ID
+      parameters:
+        - name: shopId
+          in: path
+          description: ID de la tienda
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Devuelve la tienda solicitada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shop'
+        '404':
+          description: Tienda no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      tags:
+        - shops
+      summary: Modificar una tienda por ID
+      parameters:
+        - name: shopId
+          in: path
+          description: ID de la tienda
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Shop'
+      responses:
+        '200':
+          description: La tienda se ha modificado correctamente
+        '404':
+          description: Tienda no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    delete:
+      tags:
+        - shops
+      summary: Eliminar una tienda por ID
+      parameters:
+        - name: shopId
+          in: path
+          description: ID de la tienda
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: La tienda se ha eliminado correctamente
+        '404':
+          description: Tienda no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+
+  /shop/{shopId}/employees:
+    get:
+      tags:
+        - shops
+      summary: Obtiene todos los empleados de una tienda por ID de tienda
+      parameters:
+        - name: shopId
+          in: path
+          description: ID de tienda
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Devuelve la lista de los empleados de una tienda
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Employee'
+        '204':
+          description: La tienda no tiene empleados registradas
+        '404':
+          description: Tienda no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    Client:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        firstname:
+          type: string
+        lastname:
+          type: string
+        DNI:
+          type: string
+        city:
+          type: string
+        street:
+          type: string
+        numHouse:
+          type: integer
+        age:
+          type: integer
+
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+          format: float
+        registrationDate:
+          type: string
+          format: date
+
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        number:
+          type: string
+        creationDate:
+          type: string
+          format: date
+        client:
+          $ref: '#/components/schemas/Client'
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+
+    Employee:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        DNI:
+          type: string
+        age:
+          type: integer
+        height:
+          type: number
+          format: float
+        academicTitle:
+          type: boolean
+        registerDate:
+          type: string
+          format: date
+        shop:
+          $ref: '#/components/schemas/Shop'
+
+    Shop:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        address:
+          type: string
+        employeesNumber:
+          type: integer
+        city:
+          type: string
+        meters:
+          type: number
+          format: float
+        solarium:
+          type: boolean
+        openDate:
+          type: string
+          format: date
+        employees:
+          type: array
+          items:
+            $ref: '#/components/schemas/Employee'
+
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            type: string
+
+    InternalServerError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+
+    BadRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+      example:
+        code: 400
+        message: Validation error
+        errors:
+          - El nombre es obligatorio
+          - El precio debe ser mayor que cero
